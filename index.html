@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RANZ — Islamic & Life System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    :root{
+      --bg:#0a0c10;--surface:#111520;--surface2:#161b2e;--border:#1e2840;
+      --gold:#c9a84c;--gold-light:#f0d070;--gold-dim:#7a6030;
+      --teal:#2dd4bf;--teal-dim:#134e4a;
+      --text:#e8e0d0;--text-dim:#8a8070;--text-muted:#504840;
+      --green:#4ade80;--red:#f87171;--purple:#a78bfa;--blue:#60a5fa;
+      --radius:12px;--glow:0 0 30px rgba(201,168,76,.15);
+    }
+    .light{--bg:#f5f0e8;--surface:#fffdf7;--surface2:#f0ebe0;--border:#d4c9a8;--text:#2a2015;--text-dim:#6b5c40;--text-muted:#a08060;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--bg);color:var(--text);font-family:'Cairo',sans-serif;min-height:100vh;transition:background .4s,color .4s;}
+    body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(201,168,76,.08) 0%,transparent 60%),radial-gradient(ellipse 40% 30% at 80% 80%,rgba(45,212,191,.05) 0%,transparent 50%);pointer-events:none;z-index:0;}
+
+    /* BANNER */
+    #event-banner{display:none;background:linear-gradient(135deg,#c9a84c,#f0d070,#c9a84c);color:#1a1200;text-align:center;padding:12px 20px;font-weight:700;font-size:.95rem;position:relative;z-index:100;}
+
+    /* HEADER */
+    header{position:sticky;top:0;z-index:90;background:rgba(10,12,16,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 20px;}
+    .light header{background:rgba(245,240,232,.92);}
+    .header-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:60px;gap:12px;}
+    .logo{display:flex;align-items:center;gap:10px;text-decoration:none;cursor:pointer;}
+    .logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--gold),var(--gold-light));border-radius:10px;display:grid;place-items:center;font-size:18px;box-shadow:0 0 20px rgba(201,168,76,.4);}
+    .logo-text .brand{font-size:.95rem;font-weight:900;color:var(--gold);letter-spacing:1px;}
+    .logo-text .sub{font-size:.6rem;color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;}
+    nav{display:flex;gap:2px;flex-wrap:wrap;}
+    nav a{color:var(--text-dim);text-decoration:none;font-size:.78rem;font-weight:600;padding:5px 10px;border-radius:8px;transition:all .2s;cursor:pointer;}
+    nav a:hover,nav a.active{color:var(--gold);background:rgba(201,168,76,.1);}
+    .header-actions{display:flex;gap:6px;}
+    .btn-icon{width:34px;height:34px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text-dim);cursor:pointer;display:grid;place-items:center;font-size:15px;transition:all .2s;}
+    .btn-icon:hover{border-color:var(--gold);color:var(--gold);}
+
+    /* HERO */
+    .hero{position:relative;z-index:1;text-align:center;padding:60px 20px 40px;max-width:800px;margin:0 auto;}
+    .hero-arabic{font-family:'Amiri',serif;font-size:clamp(1.6rem,4vw,2.6rem);color:var(--gold);margin-bottom:12px;text-shadow:0 0 40px rgba(201,168,76,.3);}
+    .hero h1{font-size:clamp(1.2rem,3.5vw,2rem);font-weight:900;margin-bottom:10px;}
+    .hero h1 span{color:var(--gold);}
+    .hero p{color:var(--text-dim);font-size:.9rem;max-width:480px;margin:0 auto 24px;line-height:1.7;}
+    .stats{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;}
+    .stat{text-align:center;padding:14px 20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);}
+    .stat-num{font-size:1.6rem;font-weight:900;color:var(--gold);display:block;}
+    .stat-label{font-size:.68rem;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;}
+
+    /* CONTAINER */
+    .container{max-width:1200px;margin:0 auto;padding:0 20px 100px;position:relative;z-index:1;}
+    .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;}
+    .section-title{font-size:1rem;font-weight:700;display:flex;align-items:center;gap:8px;}
+    .section-title::before{content:'';width:3px;height:18px;background:var(--gold);border-radius:2px;}
+
+    /* FILTER */
+    .filters{display:flex;gap:6px;flex-wrap:wrap;}
+    .filter-btn{padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text-dim);font-family:'Cairo',sans-serif;font-size:.75rem;font-weight:600;cursor:pointer;transition:all .2s;}
+    .filter-btn:hover{border-color:var(--gold-dim);color:var(--gold);}
+    .filter-btn.active{background:var(--gold);border-color:var(--gold);color:#1a1200;}
+
+    /* SEARCH */
+    .search-wrap{position:relative;}
+    .search-wrap input{background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Cairo',sans-serif;font-size:.82rem;padding:7px 12px 7px 32px;width:180px;outline:none;transition:all .2s;}
+    .search-wrap input:focus{border-color:var(--gold);width:220px;}
+    .search-wrap::before{content:'🔍';position:absolute;left:9px;top:50%;transform:translateY(-50%);font-size:12px;}
+
+    /* GRID */
+    .ilmu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;cursor:pointer;transition:all .3s;position:relative;overflow:hidden;}
+    .card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:opacity .3s;}
+    .card:hover{border-color:var(--gold-dim);transform:translateY(-2px);box-shadow:var(--glow);}
+    .card:hover::before{opacity:1;}
+    .card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;gap:10px;}
+    .card-kategori{font-size:.65rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:3px 9px;border-radius:20px;white-space:nowrap;}
+    .kat-dzikir{background:rgba(45,212,191,.15);color:#2dd4bf;}
+    .kat-alquran{background:rgba(201,168,76,.15);color:#c9a84c;}
+    .kat-fiqih{background:rgba(74,222,128,.15);color:#4ade80;}
+    .kat-aqidah{background:rgba(167,139,250,.15);color:#a78bfa;}
+    .kat-akhir{background:rgba(248,113,113,.15);color:#f87171;}
+    .kat-doa{background:rgba(251,191,36,.15);color:#fbbf24;}
+    .card-date{font-size:.68rem;color:var(--text-muted);}
+    .card h3{font-size:.95rem;font-weight:700;margin-bottom:8px;line-height:1.4;}
+    .card p{font-size:.8rem;color:var(--text-dim);line-height:1.7;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+    .card-footer{margin-top:14px;padding-top:12px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;}
+    .btn-read{font-size:.72rem;color:var(--gold);font-weight:600;cursor:pointer;background:none;border:none;font-family:'Cairo',sans-serif;}
+
+    /* DZIKIR */
+    .dzikir-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;text-align:center;max-width:380px;margin:0 auto 32px;}
+    .dzikir-arabic{font-family:'Amiri',serif;font-size:1.6rem;color:var(--gold);margin-bottom:6px;line-height:1.6;}
+    .dzikir-latin{font-size:.82rem;color:var(--text-dim);font-style:italic;margin-bottom:4px;}
+    .dzikir-arti{font-size:.78rem;color:var(--text-muted);margin-bottom:20px;}
+    .dzikir-counter{font-size:3.5rem;font-weight:900;color:var(--text);margin-bottom:16px;line-height:1;}
+    .dzikir-counter span{font-size:.9rem;color:var(--text-dim);font-weight:400;display:block;margin-top:4px;}
+    .dzikir-controls{display:flex;gap:12px;justify-content:center;}
+    .btn-tap{width:74px;height:74px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));border:none;font-size:1.8rem;cursor:pointer;transition:all .1s;box-shadow:0 4px 20px rgba(201,168,76,.4);}
+    .btn-tap:active{transform:scale(.92);}
+    .btn-reset{width:42px;height:42px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);color:var(--text-dim);font-size:1rem;cursor:pointer;align-self:center;transition:all .2s;}
+    .btn-reset:hover{color:var(--red);border-color:var(--red);}
+    .dzikir-selector{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;}
+    .dzikir-sel-btn{padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text-dim);font-family:'Cairo',sans-serif;font-size:.72rem;cursor:pointer;transition:all .2s;}
+    .dzikir-sel-btn.active{background:var(--teal-dim);border-color:var(--teal);color:var(--teal);}
+    .dzikir-target{font-size:.75rem;color:var(--text-muted);margin-bottom:16px;}
+    .progress-bar{height:4px;background:var(--border);border-radius:2px;margin-bottom:20px;overflow:hidden;}
+    .progress-fill{height:100%;background:var(--gold);border-radius:2px;transition:width .2s;}
+
+    /* ── NABUNG ── */
+    .nabung-wrap{max-width:480px;margin:0 auto;}
+    .nabung-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:16px;}
+    .nabung-title{font-size:1rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+    .input-group{margin-bottom:14px;}
+    .input-group label{display:block;font-size:.75rem;color:var(--text-dim);margin-bottom:6px;font-weight:600;}
+    .input-group input,.input-group select,.input-group textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Cairo',sans-serif;font-size:.85rem;padding:10px 14px;outline:none;transition:border .2s;}
+    .input-group input:focus,.input-group select:focus,.input-group textarea:focus{border-color:var(--gold);}
+    .input-group textarea{resize:vertical;min-height:80px;}
+    .btn-primary{width:100%;padding:12px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold-light));border:none;color:#1a1200;font-family:'Cairo',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s;margin-top:4px;}
+    .btn-primary:hover{opacity:.9;transform:translateY(-1px);}
+    .btn-danger{background:rgba(248,113,113,.2);border:1px solid var(--red);color:var(--red);padding:6px 14px;border-radius:8px;font-family:'Cairo',sans-serif;font-size:.75rem;cursor:pointer;font-weight:600;}
+
+    /* Progress nabung */
+    .nabung-progress{margin-top:16px;}
+    .nabung-info{display:flex;justify-content:space-between;margin-bottom:8px;font-size:.8rem;}
+    .nabung-bar{height:10px;background:var(--border);border-radius:5px;overflow:hidden;margin-bottom:8px;}
+    .nabung-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--green));border-radius:5px;transition:width .4s;}
+    .nabung-pct{font-size:.75rem;color:var(--text-muted);text-align:right;}
+    .nabung-setor{display:flex;gap:8px;margin-top:12px;}
+    .nabung-setor input{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Cairo',sans-serif;font-size:.85rem;padding:8px 12px;outline:none;}
+    .nabung-setor input:focus{border-color:var(--gold);}
+    .btn-setor{padding:8px 16px;border-radius:8px;background:var(--gold);border:none;color:#1a1200;font-family:'Cairo',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;}
+    .riwayat-list{margin-top:16px;}
+    .riwayat-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:.82rem;}
+    .riwayat-item:last-child{border-bottom:none;}
+    .riwayat-nominal{color:var(--green);font-weight:700;}
+    .riwayat-date{color:var(--text-muted);font-size:.72rem;}
+    .empty-state{text-align:center;padding:32px 20px;color:var(--text-muted);}
+    .empty-state .ei{font-size:2.5rem;margin-bottom:10px;}
+
+    /* ── PR ── */
+    .pr-wrap{max-width:600px;margin:0 auto;}
+    .pr-list{display:flex;flex-direction:column;gap:12px;margin-top:20px;}
+    .pr-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;display:flex;gap:14px;align-items:flex-start;}
+    .pr-card.done{opacity:.5;}
+    .pr-card.urgent{border-color:var(--red);}
+    .pr-check{width:22px;height:22px;border-radius:6px;border:2px solid var(--border);cursor:pointer;display:grid;place-items:center;flex-shrink:0;margin-top:2px;transition:all .2s;background:transparent;}
+    .pr-check.checked{background:var(--green);border-color:var(--green);}
+    .pr-check.checked::after{content:'✓';color:#fff;font-size:13px;font-weight:700;}
+    .pr-body{flex:1;}
+    .pr-mapel{font-size:.72rem;font-weight:700;color:var(--purple);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+    .pr-desc{font-size:.88rem;font-weight:600;margin-bottom:6px;}
+    .pr-meta{display:flex;gap:10px;flex-wrap:wrap;}
+    .pr-badge{font-size:.68rem;padding:2px 8px;border-radius:20px;background:var(--surface2);color:var(--text-dim);}
+    .pr-badge.red{background:rgba(248,113,113,.15);color:var(--red);}
+    .pr-badge.green{background:rgba(74,222,128,.15);color:var(--green);}
+    .pr-del{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:16px;padding:4px;flex-shrink:0;}
+    .pr-del:hover{color:var(--red);}
+
+    /* MODAL */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);z-index:200;display:none;place-items:center;padding:20px;}
+    .modal-overlay.open{display:grid;}
+    .modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;max-width:580px;width:100%;max-height:82vh;overflow-y:auto;position:relative;animation:modalIn .3s ease;}
+    @keyframes modalIn{from{opacity:0;transform:scale(.95) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+    .modal-close{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text-dim);cursor:pointer;font-size:13px;display:grid;place-items:center;}
+    .modal h2{font-size:1.2rem;font-weight:700;margin-bottom:8px;line-height:1.4;}
+    .modal-date{font-size:.72rem;color:var(--text-muted);margin-bottom:18px;}
+    .modal-isi{font-size:.88rem;color:var(--text-dim);line-height:1.9;white-space:pre-wrap;}
+
+    /* CALM */
+    .calm-overlay{position:fixed;inset:0;background:#050708;z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;gap:20px;}
+    .calm-overlay.active{display:flex;}
+    .calm-text{font-family:'Amiri',serif;font-size:clamp(1.8rem,5vw,3.5rem);color:var(--gold);text-align:center;animation:breathe 4s ease-in-out infinite;padding:0 24px;}
+    @keyframes breathe{0%,100%{opacity:.6;transform:scale(.98)}50%{opacity:1;transform:scale(1)}}
+    .calm-close{padding:9px 22px;border-radius:20px;border:1px solid var(--gold-dim);background:transparent;color:var(--gold);font-family:'Cairo',sans-serif;font-size:.82rem;cursor:pointer;}
+
+    /* NOTIF */
+    .notif{position:fixed;bottom:80px;right:16px;background:var(--surface);border:1px solid var(--gold-dim);border-radius:10px;padding:12px 18px;font-size:.82rem;color:var(--text);z-index:300;transform:translateX(120%);transition:transform .3s ease;max-width:260px;}
+    .notif.show{transform:translateX(0);}
+
+    /* SCROLL TOP */
+    .scroll-top{position:fixed;bottom:76px;left:16px;width:38px;height:38px;border-radius:10px;background:var(--surface);border:1px solid var(--border);color:var(--text-dim);cursor:pointer;display:grid;place-items:center;font-size:16px;opacity:0;transition:all .3s;z-index:50;}
+    .scroll-top.show{opacity:1;}
+
+    /* PAGE */
+    .page{display:none;}
+    .page.active{display:block;}
+
+    /* QURAN */
+    .quran-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+    .quran-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;}
+    .quran-num{width:30px;height:30px;background:linear-gradient(135deg,var(--gold-dim),var(--gold));border-radius:50%;display:grid;place-items:center;font-size:.72rem;font-weight:700;color:#1a1200;margin-bottom:8px;}
+    .quran-title{font-family:'Amiri',serif;font-size:1.2rem;color:var(--gold);margin-bottom:4px;}
+    .quran-latin{font-size:.75rem;color:var(--text-dim);margin-bottom:2px;}
+    .quran-info{font-size:.68rem;color:var(--text-muted);}
+
+    /* MOBILE NAV */
+    .mobile-nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);display:none;z-index:80;padding:6px 0 10px;}
+    @media(max-width:768px){.mobile-nav{display:flex;}.container{padding-bottom:90px;}nav{display:none;}}
+    .mobile-nav-items{display:flex;justify-content:space-around;width:100%;}
+    .mobile-nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px 8px;cursor:pointer;border-radius:8px;transition:all .2s;}
+    .mobile-nav-item .icon{font-size:18px;}
+    .mobile-nav-item .label{font-size:.55rem;font-weight:600;color:var(--text-muted);letter-spacing:.5px;}
+    .mobile-nav-item.active .label{color:var(--gold);}
+
+    /* LOADING */
+    .loading{display:flex;justify-content:center;padding:40px;}
+    .spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* CONFIG */
+    .config-wrap{max-width:480px;margin:0 auto;}
+    .config-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:14px;}
+    .config-title{font-size:.9rem;font-weight:700;margin-bottom:14px;color:var(--gold);}
+    .saved-badge{display:inline-block;padding:2px 10px;border-radius:20px;background:rgba(74,222,128,.15);color:var(--green);font-size:.7rem;font-weight:700;margin-left:8px;}
+  </style>
+</head>
+<body>
+
+<div id="event-banner"></div>
+
+<header>
+  <div class="header-inner">
+    <div class="logo" onclick="showPage('home')">
+      <div class="logo-icon">🕌</div>
+      <div class="logo-text">
+        <div class="brand">RANZ</div>
+        <div class="sub">Life & Islamic</div>
+      </div>
+    </div>
+    <nav id="main-nav">
+      <a onclick="showPage('home')" data-page="home" class="active">Home</a>
+      <a onclick="showPage('dzikir')" data-page="dzikir">Dzikir</a>
+      <a onclick="showPage('quran')" data-page="quran">Al-Qur'an</a>
+      <a onclick="showPage('fiqih')" data-page="fiqih">Fiqih</a>
+      <a onclick="showPage('aqidah')" data-page="aqidah">Aqidah</a>
+      <a onclick="showPage('akhir')" data-page="akhir">Akhir Zaman</a>
+      <a onclick="showPage('doa')" data-page="doa">Doa</a>
+      <a onclick="showPage('nabung')" data-page="nabung">💰 Nabung</a>
+      <a onclick="showPage('pr')" data-page="pr">📚 PR</a>
+    </nav>
+    <div class="header-actions">
+      <button class="btn-icon" onclick="toggleDark()" title="Mode">🌙</button>
+      <button class="btn-icon" onclick="openCalm()" title="Tenang">😌</button>
+      <button class="btn-icon" onclick="loadIlmu()" title="Refresh">🔄</button>
+      <button class="btn-icon" onclick="showPage('config')" title="Pengaturan">⚙️</button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ══ HOME ══════════════════════════════════ -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-arabic">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+    <h1>RANZ <span>Islamic & Life</span> System</h1>
+    <p>Belajar ilmu Islam, atur nabungan, dan kelola PR sekolah dalam satu aplikasi. Semoga jadi amal jariyah. 🤲</p>
+    <div class="stats">
+      <div class="stat"><span class="stat-num" id="stat-ilmu">—</span><span class="stat-label">Ilmu</span></div>
+      <div class="stat"><span class="stat-num" id="stat-nabung">—</span><span class="stat-label">Target Nabung</span></div>
+      <div class="stat"><span class="stat-num" id="stat-pr">—</span><span class="stat-label">PR Aktif</span></div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-title">Semua Ilmu</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+        <div class="filters" id="filter-home">
+          <button class="filter-btn active" onclick="filterIlmu('',this)">Semua</button>
+          <button class="filter-btn" onclick="filterIlmu('Dzikir',this)">📿 Dzikir</button>
+          <button class="filter-btn" onclick="filterIlmu('Al-Quran',this)">📖 Al-Quran</button>
+          <button class="filter-btn" onclick="filterIlmu('Fiqih',this)">⚖️ Fiqih</button>
+          <button class="filter-btn" onclick="filterIlmu('Aqidah',this)">🧠 Aqidah</button>
+          <button class="filter-btn" onclick="filterIlmu('Akhir Zaman',this)">🛡️ Akhir Zaman</button>
+          <button class="filter-btn" onclick="filterIlmu('Doa',this)">🤍 Doa</button>
+        </div>
+        <div class="search-wrap"><input type="text" id="search-input" placeholder="Cari ilmu..." oninput="searchIlmu(this.value)"></div>
+      </div>
+    </div>
+    <div id="ilmu-container"><div class="loading"><div class="spinner"></div></div></div>
+  </div>
+</div>
+
+<!-- ══ DZIKIR ══════════════════════════════════ -->
+<div class="page" id="page-dzikir">
+  <div class="hero" style="padding-bottom:16px;">
+    <div class="hero-arabic">سُبْحَانَ اللَّه</div>
+    <h1>📿 Counter <span>Dzikir</span></h1>
+    <p>Perbanyak dzikir kepada Allah SWT dalam setiap keadaan.</p>
+  </div>
+  <div class="container">
+    <div class="dzikir-selector">
+      <button class="dzikir-sel-btn active" onclick="setDzikir(0,this)">Subhanallah</button>
+      <button class="dzikir-sel-btn" onclick="setDzikir(1,this)">Alhamdulillah</button>
+      <button class="dzikir-sel-btn" onclick="setDzikir(2,this)">Allahu Akbar</button>
+      <button class="dzikir-sel-btn" onclick="setDzikir(3,this)">Astaghfirullah</button>
+      <button class="dzikir-sel-btn" onclick="setDzikir(4,this)">Laa ilaha illallah</button>
+    </div>
+    <div class="dzikir-panel">
+      <div class="dzikir-arabic" id="dzikir-arabic">سُبْحَانَ اللَّه</div>
+      <div class="dzikir-latin" id="dzikir-latin">Subhanallah</div>
+      <div class="dzikir-arti" id="dzikir-arti">Maha Suci Allah</div>
+      <div class="dzikir-target" id="dzikir-target">Target: 33x</div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+      <div class="dzikir-counter"><div id="dzikir-count">0</div><span id="dzikir-session">sesi ini</span></div>
+      <div class="dzikir-controls">
+        <button class="btn-reset" onclick="resetDzikir()">↺</button>
+        <button class="btn-tap" onclick="tapDzikir()">☝️</button>
+      </div>
+    </div>
+    <div class="section-header" style="margin-top:32px;"><div class="section-title">Ilmu Dzikir</div></div>
+    <div id="dzikir-ilmu-container"><div class="loading"><div class="spinner"></div></div></div>
+  </div>
+</div>
+
+<!-- ══ AL-QURAN ══════════════════════════════ -->
+<div class="page" id="page-quran">
+  <div class="hero" style="padding-bottom:16px;">
+    <div class="hero-arabic">الْقُرْآنُ الْكَرِيمُ</div>
+    <h1>📖 <span>Al-Qur'an</span></h1>
+    <p>Bacalah Al-Quran karena ia akan menjadi syafaat bagi pembacanya di hari kiamat.</p>
+  </div>
+  <div class="container">
+    <div class="section-header"><div class="section-title">Surah Pilihan</div></div>
+    <div class="quran-grid">
+      <div class="quran-card"><div class="quran-num">1</div><div class="quran-title">الْفَاتِحَة</div><div class="quran-latin">Al-Fatihah — Pembukaan</div><div class="quran-info">7 ayat • Makkiyah</div></div>
+      <div class="quran-card"><div class="quran-num">36</div><div class="quran-title">يٰسٓ</div><div class="quran-latin">Yasin — Jantung Al-Quran</div><div class="quran-info">83 ayat • Makkiyah</div></div>
+      <div class="quran-card"><div class="quran-num">55</div><div class="quran-title">الرَّحْمَن</div><div class="quran-latin">Ar-Rahman — Maha Pemurah</div><div class="quran-info">78 ayat • Madaniyah</div></div>
+      <div class="quran-card"><div class="quran-num">67</div><div class="quran-title">الْمُلْك</div><div class="quran-latin">Al-Mulk — Kerajaan</div><div class="quran-info">30 ayat • Makkiyah</div></div>
+      <div class="quran-card"><div class="quran-num">112</div><div class="quran-title">الْإِخْلَاص</div><div class="quran-latin">Al-Ikhlas — Kemurnian</div><div class="quran-info">4 ayat • Makkiyah</div></div>
+      <div class="quran-card"><div class="quran-num">114</div><div class="quran-title">النَّاس</div><div class="quran-latin">An-Nas — Manusia</div><div class="quran-info">6 ayat • Makkiyah</div></div>
+    </div>
+    <div class="section-header" style="margin-top:32px;"><div class="section-title">Ilmu Al-Qur'an</div></div>
+    <div id="quran-ilmu-container"><div class="loading"><div class="spinner"></div></div></div>
+  </div>
+</div>
+
+<!-- ══ FIQIH / AQIDAH / AKHIR / DOA ══════════ -->
+<div class="page" id="page-fiqih">
+  <div class="hero" style="padding-bottom:16px;"><div class="hero-arabic">الْفِقْهُ</div><h1>⚖️ Ilmu <span>Fiqih</span></h1></div>
+  <div class="container"><div id="fiqih-container"><div class="loading"><div class="spinner"></div></div></div></div>
+</div>
+<div class="page" id="page-aqidah">
+  <div class="hero" style="padding-bottom:16px;"><div class="hero-arabic">الْعَقِيدَة</div><h1>🧠 Ilmu <span>Aqidah</span></h1></div>
+  <div class="container"><div id="aqidah-container"><div class="loading"><div class="spinner"></div></div></div></div>
+</div>
+<div class="page" id="page-akhir">
+  <div class="hero" style="padding-bottom:16px;"><div class="hero-arabic">أَشْرَاطُ السَّاعَة</div><h1>🛡️ Fitnah <span>Akhir Zaman</span></h1></div>
+  <div class="container"><div id="akhir-container"><div class="loading"><div class="spinner"></div></div></div></div>
+</div>
+<div class="page" id="page-doa">
+  <div class="hero" style="padding-bottom:16px;"><div class="hero-arabic">اَللّهُمَّ</div><h1>🤍 Kumpulan <span>Doa</span></h1></div>
+  <div class="container"><div id="doa-container"><div class="loading"><div class="spinner"></div></div></div></div>
+</div>
+
+<!-- ══ NABUNG ══════════════════════════════════ -->
+<div class="page" id="page-nabung">
+  <div class="hero" style="padding-bottom:16px;">
+    <div class="hero-arabic" style="font-size:2rem;">💰</div>
+    <h1>Celengan <span>Digital</span></h1>
+    <p>Atur target tabungan kamu dan pantau progressnya setiap hari.</p>
+  </div>
+  <div class="container">
+    <div class="nabung-wrap">
+
+      <!-- Form buat target baru -->
+      <div class="nabung-card" id="nabung-form-card">
+        <div class="nabung-title">🎯 Buat Target Tabungan</div>
+        <div class="input-group">
+          <label>Nama Target</label>
+          <input type="text" id="nb-nama" placeholder="Contoh: Beli HP baru, Jalan-jalan, dll">
+        </div>
+        <div class="input-group">
+          <label>Target Nominal (Rp)</label>
+          <input type="number" id="nb-nominal" placeholder="Contoh: 500000" min="0">
+        </div>
+        <div class="input-group">
+          <label>Target Hari</label>
+          <input type="number" id="nb-hari" placeholder="Contoh: 30" min="1">
+        </div>
+        <button class="btn-primary" onclick="buatTarget()">💰 Buat Target</button>
+      </div>
+
+      <!-- Daftar target -->
+      <div id="nabung-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PR SEKOLAH ══════════════════════════════ -->
+<div class="page" id="page-pr">
+  <div class="hero" style="padding-bottom:16px;">
+    <div class="hero-arabic" style="font-size:2rem;">📚</div>
+    <h1>PR <span>Sekolah</span></h1>
+    <p>Catat PR sekolah agar tidak ada yang terlupakan. Notifikasi otomatis mengingatkan kamu!</p>
+  </div>
+  <div class="container">
+    <div class="pr-wrap">
+      <!-- Form tambah PR -->
+      <div class="nabung-card">
+        <div class="nabung-title">➕ Tambah PR Baru</div>
+        <div class="input-group">
+          <label>Mata Pelajaran</label>
+          <input type="text" id="pr-mapel" placeholder="Contoh: Matematika, Bahasa Indonesia...">
+        </div>
+        <div class="input-group">
+          <label>Halaman</label>
+          <input type="text" id="pr-halaman" placeholder="Contoh: Hal. 45-48, Soal no. 1-10">
+        </div>
+        <div class="input-group">
+          <label>Jenis Tugas</label>
+          <select id="pr-jenis">
+            <option value="Kerjain Soal">Kerjain Soal</option>
+            <option value="Nulis di Buku">Nulis di Buku</option>
+            <option value="Baca & Rangkum">Baca & Rangkum</option>
+            <option value="Praktik">Praktik</option>
+            <option value="Presentasi">Presentasi</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>Dikumpulkan Hari</label>
+          <select id="pr-hari">
+            <option value="Senin">Senin</option>
+            <option value="Selasa">Selasa</option>
+            <option value="Rabu">Rabu</option>
+            <option value="Kamis">Kamis</option>
+            <option value="Jumat">Jumat</option>
+            <option value="Sabtu">Sabtu</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>Tanggal Dikumpulkan</label>
+          <input type="date" id="pr-tanggal">
+        </div>
+        <div class="input-group">
+          <label>Catatan (opsional)</label>
+          <textarea id="pr-catatan" placeholder="Catatan tambahan..."></textarea>
+        </div>
+        <button class="btn-primary" onclick="tambahPR()">📚 Simpan PR</button>
+      </div>
+
+      <!-- Filter PR -->
+      <div class="filters" style="margin-top:16px;">
+        <button class="filter-btn active" onclick="filterPR('semua',this)">Semua</button>
+        <button class="filter-btn" onclick="filterPR('aktif',this)">Aktif</button>
+        <button class="filter-btn" onclick="filterPR('selesai',this)">Selesai</button>
+        <button class="filter-btn" onclick="filterPR('urgent',this)">🔴 Urgent</button>
+      </div>
+
+      <div class="pr-list" id="pr-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CONFIG ══════════════════════════════════ -->
+<div class="page" id="page-config">
+  <div class="hero" style="padding-bottom:16px;">
+    <div class="hero-arabic" style="font-size:2rem;">⚙️</div>
+    <h1>Pengaturan <span>API</span></h1>
+    <p>Set URL server agar ilmu Islam bisa di-load dari mana saja.</p>
+  </div>
+  <div class="container">
+    <div class="config-wrap">
+      <div class="config-card">
+        <div class="config-title">🌐 URL Server API</div>
+        <div class="input-group">
+          <label>Base URL (tanpa slash di akhir)</label>
+          <input type="text" id="cfg-url" placeholder="https://xxx.trycloudflare.com">
+        </div>
+        <p style="font-size:.75rem;color:var(--text-muted);margin-bottom:14px;">Contoh: https://ranz.up.railway.app — atau URL tunnel kamu</p>
+        <button class="btn-primary" onclick="saveConfig()">💾 Simpan & Reload Ilmu</button>
+      </div>
+      <div class="config-card">
+        <div class="config-title">ℹ️ Info</div>
+        <p style="font-size:.8rem;color:var(--text-dim);line-height:1.7;">
+          Fitur Nabung dan PR Sekolah tersimpan di HP kamu (offline, tidak perlu server).<br><br>
+          Ilmu Islam diambil dari server API. Kalau tidak ada server, data default tetap tampil.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- MOBILE NAV -->
+<nav class="mobile-nav">
+  <div class="mobile-nav-items">
+    <div class="mobile-nav-item active" onclick="showPage('home')" data-nav="home"><span class="icon">🏠</span><span class="label">HOME</span></div>
+    <div class="mobile-nav-item" onclick="showPage('dzikir')" data-nav="dzikir"><span class="icon">📿</span><span class="label">DZIKIR</span></div>
+    <div class="mobile-nav-item" onclick="showPage('nabung')" data-nav="nabung"><span class="icon">💰</span><span class="label">NABUNG</span></div>
+    <div class="mobile-nav-item" onclick="showPage('pr')" data-nav="pr"><span class="icon">📚</span><span class="label">PR</span></div>
+    <div class="mobile-nav-item" onclick="showPage('doa')" data-nav="doa"><span class="icon">🤍</span><span class="label">DOA</span></div>
+  </div>
+</nav>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modal-kat"></div>
+    <h2 id="modal-title"></h2>
+    <div class="modal-date" id="modal-date"></div>
+    <div class="modal-isi" id="modal-isi"></div>
+  </div>
+</div>
+
+<!-- CALM -->
+<div class="calm-overlay" id="calm-overlay">
+  <div class="calm-text">سُبْحَانَ اللَّهِ وَبِحَمْدِهِ<br>سُبْحَانَ اللَّهِ الْعَظِيمِ</div>
+  <div style="font-size:.78rem;color:var(--text-muted);font-style:italic;text-align:center;">Subhanallahi wa bihamdihi, Subhanallahil 'azhim</div>
+  <button class="calm-close" onclick="closeCalm()">Keluar Mode Tenang</button>
+</div>
+
+<div class="notif" id="notif"></div>
+<button class="scroll-top" id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+'use strict';
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+let allIlmu = [];
+let activeFilter = '';
+let currentSearch = '';
+let currentPage = 'home';
+let prFilter = 'semua';
+
+// API URL — bisa diganti via halaman config
+let API_BASE = localStorage.getItem('api_base') || '';
+
+const DZIKIRLIST = [
+  {arabic:'سُبْحَانَ اللَّه',latin:'Subhanallah',arti:'Maha Suci Allah',target:33},
+  {arabic:'الْحَمْدُ لِلَّه',latin:'Alhamdulillah',arti:'Segala Puji bagi Allah',target:33},
+  {arabic:'اللَّهُ أَكْبَر',latin:'Allahu Akbar',arti:'Allah Maha Besar',target:33},
+  {arabic:'أَسْتَغْفِرُ اللَّه',latin:'Astaghfirullah',arti:'Aku memohon ampun kepada Allah',target:100},
+  {arabic:'لَا إِلَهَ إِلَّا اللَّه',latin:'Laa ilaha illallah',arti:'Tiada Tuhan selain Allah',target:100},
+];
+let currentDzikir = 0;
+let dzikirCount = 0;
+
+// ══════════════════════════════════════════
+// NAV
+// ══════════════════════════════════════════
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  document.querySelectorAll('#main-nav a').forEach(a => a.classList.toggle('active', a.dataset.page === page));
+  document.querySelectorAll('.mobile-nav-item').forEach(a => a.classList.toggle('active', a.dataset.nav === page));
+  currentPage = page;
+  window.scrollTo({top:0});
+  if (page === 'dzikir') renderCat('dzikir-ilmu-container','Dzikir');
+  if (page === 'quran')  renderCat('quran-ilmu-container','Al-Quran');
+  if (page === 'fiqih')  renderCat('fiqih-container','Fiqih');
+  if (page === 'aqidah') renderCat('aqidah-container','Aqidah');
+  if (page === 'akhir')  renderCat('akhir-container','Akhir Zaman');
+  if (page === 'doa')    renderCat('doa-container','Doa');
+  if (page === 'nabung') renderNabung();
+  if (page === 'pr')     renderPR();
+  if (page === 'config') { const el = document.getElementById('cfg-url'); if(el) el.value = API_BASE; }
+}
+
+// ══════════════════════════════════════════
+// ILMU — LOAD & RENDER
+// ══════════════════════════════════════════
+async function loadIlmu() {
+  try {
+    const url = API_BASE ? API_BASE + '/api/ilmu' : '/api/ilmu';
+    const res  = await fetch(url);
+    const json = await res.json();
+    allIlmu = json.data || [];
+    document.getElementById('stat-ilmu').textContent = allIlmu.length;
+    renderIlmu(allIlmu);
+    showNotif('✅ ' + allIlmu.length + ' ilmu dimuat');
+  } catch {
+    // Load default jika API tidak tersedia
+    if (!allIlmu.length) {
+      allIlmu = getDefaultIlmu();
+      document.getElementById('stat-ilmu').textContent = allIlmu.length;
+      renderIlmu(allIlmu);
+    }
+  }
+}
+
+function getDefaultIlmu() {
+  return [
+    {id:'1',judul:'Keutamaan Bismillah',isi:'Bismillahirrahmanirrahim adalah kalimat pembuka yang penuh berkah. Setiap amal yang dimulai dengan Bismillah akan mendapat ridha Allah SWT.',kategori:'Dzikir',tanggal:'2026-01-01'},
+    {id:'2',judul:'Syarat Sah Sholat',isi:'Syarat sah sholat ada 8: (1) Suci dari hadats, (2) Suci badan dan pakaian, (3) Menutup aurat, (4) Menghadap kiblat, (5) Masuk waktu sholat, (6) Mengetahui bahwa sholat itu fardhu, (7) Tidak meyakini rukun sebagai sunnah, (8) Menjauhi yang membatalkan.',kategori:'Fiqih',tanggal:'2026-01-01'},
+    {id:'3',judul:'Rukun Iman',isi:'Rukun Iman ada 6: (1) Iman kepada Allah, (2) Malaikat-Nya, (3) Kitab-Kitab-Nya, (4) Para Rasul-Nya, (5) Hari Akhir, (6) Qadha dan Qadar.',kategori:'Aqidah',tanggal:'2026-01-01'},
+    {id:'4',judul:'Tanda Kiamat Kecil',isi:'Di antara tanda kiamat kecil: diutusnya Nabi SAW, banyaknya fitnah, banyak pembunuhan, harta melimpah hingga tidak ada yang mau menerima zakat.',kategori:'Akhir Zaman',tanggal:'2026-01-01'},
+    {id:'5',judul:'Doa Sebelum Tidur',isi:'بِاسْمِكَ اللّهُمَّ أَمُوتُ وَأَحْيَا\nBismika Allahumma amuutu wa ahyaa\nArtinya: Dengan nama-Mu ya Allah, aku mati dan aku hidup.',kategori:'Doa',tanggal:'2026-01-01'},
+    {id:'6',judul:'Surah Al-Fatihah',isi:'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ\nالْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ\nUmmu Al-Quran, wajib dibaca di setiap rakaat sholat.',kategori:'Al-Quran',tanggal:'2026-01-01'},
+  ];
+}
+
+function renderIlmu(data) {
+  const el = document.getElementById('ilmu-container');
+  if (!data.length) { el.innerHTML = emptyHTML('📭','Belum ada ilmu. Tambahkan via Telegram Bot.'); return; }
+  el.innerHTML = `<div class="ilmu-grid">${data.map(cardHTML).join('')}</div>`;
+}
+
+function renderCat(containerId, kat) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const d = allIlmu.filter(x => x.kategori === kat);
+  el.innerHTML = d.length ? `<div class="ilmu-grid">${d.map(cardHTML).join('')}</div>` : emptyHTML('📭','Belum ada ilmu kategori ' + kat);
+}
+
+const ICONS = {Dzikir:'📿','Al-Quran':'📖',Fiqih:'⚖️',Aqidah:'🧠','Akhir Zaman':'🛡️',Doa:'🤍'};
+const KATCLASS = {Dzikir:'kat-dzikir','Al-Quran':'kat-alquran',Fiqih:'kat-fiqih',Aqidah:'kat-aqidah','Akhir Zaman':'kat-akhir',Doa:'kat-doa'};
+
+function cardHTML(d) {
+  const kc = KATCLASS[d.kategori] || 'kat-fiqih';
+  const ic = ICONS[d.kategori] || '';
+  return `<div class="card" onclick="openModal('${esc(d.id)}')">
+    <div class="card-top">
+      <span class="card-kategori ${kc}">${ic} ${d.kategori}</span>
+      <span class="card-date">${d.tanggal}</span>
+    </div>
+    <h3>${escH(d.judul)}</h3>
+    <p>${escH(d.isi)}</p>
+    <div class="card-footer"><button class="btn-read">Baca selengkapnya →</button></div>
+  </div>`;
+}
+
+function emptyHTML(icon, msg) {
+  return `<div class="empty-state"><div class="ei">${icon}</div><p>${msg}</p></div>`;
+}
+
+// FILTER & SEARCH
+function filterIlmu(kat, btn) {
+  activeFilter = kat;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilters();
+}
+function searchIlmu(q) { currentSearch = q.toLowerCase(); applyFilters(); }
+function applyFilters() {
+  let d = allIlmu;
+  if (activeFilter) d = d.filter(x => x.kategori === activeFilter);
+  if (currentSearch) d = d.filter(x => x.judul.toLowerCase().includes(currentSearch) || x.isi.toLowerCase().includes(currentSearch));
+  renderIlmu(d);
+}
+
+// MODAL
+function openModal(id) {
+  const d = allIlmu.find(x => x.id === id); if (!d) return;
+  const kc = KATCLASS[d.kategori] || '';
+  const ic = ICONS[d.kategori] || '';
+  document.getElementById('modal-kat').innerHTML = `<span class="card-kategori ${kc}" style="margin-bottom:10px;display:inline-block;">${ic} ${d.kategori}</span>`;
+  document.getElementById('modal-title').textContent = d.judul;
+  document.getElementById('modal-date').textContent = '📅 ' + d.tanggal;
+  document.getElementById('modal-isi').textContent = d.isi;
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('modal-overlay') && !e.target.classList.contains('modal-close')) return;
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ══════════════════════════════════════════
+// DZIKIR
+// ══════════════════════════════════════════
+function setDzikir(idx, btn) {
+  currentDzikir = idx; dzikirCount = 0; updateDzikirUI();
+  document.querySelectorAll('.dzikir-sel-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function tapDzikir() {
+  dzikirCount++;
+  updateDzikirUI();
+  const d = DZIKIRLIST[currentDzikir];
+  if (dzikirCount % d.target === 0) showNotif('✅ ' + d.latin + ' ' + d.target + 'x selesai! 🌙');
+}
+function resetDzikir() { dzikirCount = 0; updateDzikirUI(); }
+function updateDzikirUI() {
+  const d = DZIKIRLIST[currentDzikir];
+  document.getElementById('dzikir-arabic').textContent = d.arabic;
+  document.getElementById('dzikir-latin').textContent  = d.latin;
+  document.getElementById('dzikir-arti').textContent   = d.arti;
+  document.getElementById('dzikir-target').textContent = 'Target: ' + d.target + 'x';
+  document.getElementById('dzikir-count').textContent  = dzikirCount;
+  document.getElementById('progress-fill').style.width = Math.min((dzikirCount % d.target || (dzikirCount && !( dzikirCount % d.target) ? d.target : 0)) / d.target * 100, 100) + '%';
+  const sesi = Math.floor(dzikirCount / d.target);
+  document.getElementById('dzikir-session').textContent = sesi > 0 ? sesi + ' putaran selesai' : 'sesi ini';
+}
+
+// ══════════════════════════════════════════
+// NABUNG
+// ══════════════════════════════════════════
+function getNabungData() { return JSON.parse(localStorage.getItem('nabung_targets') || '[]'); }
+function saveNabungData(d) { localStorage.setItem('nabung_targets', JSON.stringify(d)); }
+
+function buatTarget() {
+  const nama    = document.getElementById('nb-nama').value.trim();
+  const nominal = parseInt(document.getElementById('nb-nominal').value);
+  const hari    = parseInt(document.getElementById('nb-hari').value);
+  if (!nama || !nominal || !hari) { showNotif('⚠️ Isi semua kolom dulu!'); return; }
+  const targets = getNabungData();
+  targets.push({
+    id: Date.now().toString(),
+    nama, nominal, hari,
+    terkumpul: 0,
+    riwayat: [],
+    dibuat: new Date().toISOString().split('T')[0],
+  });
+  saveNabungData(targets);
+  document.getElementById('nb-nama').value = '';
+  document.getElementById('nb-nominal').value = '';
+  document.getElementById('nb-hari').value = '';
+  showNotif('🎯 Target "' + nama + '" dibuat!');
+  renderNabung();
+  scheduleNabungNotif();
+}
+
+function setorNabung(id) {
+  const input = document.getElementById('setor-' + id);
+  const nominal = parseInt(input.value);
+  if (!nominal || nominal <= 0) { showNotif('⚠️ Masukkan nominal yang valid!'); return; }
+  const targets = getNabungData();
+  const idx = targets.findIndex(t => t.id === id);
+  if (idx === -1) return;
+  targets[idx].terkumpul += nominal;
+  targets[idx].riwayat.unshift({nominal, tanggal: new Date().toISOString().split('T')[0]});
+  saveNabungData(targets);
+  input.value = '';
+  const pct = Math.round(targets[idx].terkumpul / targets[idx].nominal * 100);
+  showNotif('💰 +Rp' + nominal.toLocaleString('id') + ' disimpan! (' + pct + '%)');
+  if (targets[idx].terkumpul >= targets[idx].nominal) showNotif('🎉 TARGET TERCAPAI! Alhamdulillah!');
+  renderNabung();
+}
+
+function hapusTarget(id) {
+  if (!confirm('Hapus target ini?')) return;
+  const targets = getNabungData().filter(t => t.id !== id);
+  saveNabungData(targets);
+  renderNabung();
+  showNotif('🗑️ Target dihapus');
+}
+
+function renderNabung() {
+  const targets = getNabungData();
+  const el = document.getElementById('nabung-list');
+  document.getElementById('stat-nabung').textContent = targets.length;
+  if (!targets.length) { el.innerHTML = emptyHTML('💰','Belum ada target tabungan. Buat sekarang!'); return; }
+  el.innerHTML = targets.map(t => {
+    const pct = Math.min(Math.round(t.terkumpul / t.nominal * 100), 100);
+    const sisa = t.nominal - t.terkumpul;
+    const riwHTML = t.riwayat.slice(0,5).map(r =>
+      `<div class="riwayat-item"><span>${r.tanggal}</span><span class="riwayat-nominal">+Rp${r.nominal.toLocaleString('id')}</span></div>`
+    ).join('');
+    return `<div class="nabung-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div class="nabung-title" style="margin:0;">🎯 ${escH(t.nama)}</div>
+        <button class="btn-danger" onclick="hapusTarget('${t.id}')">🗑</button>
+      </div>
+      <div class="nabung-progress">
+        <div class="nabung-info">
+          <span>Terkumpul: <strong>Rp${t.terkumpul.toLocaleString('id')}</strong></span>
+          <span>Target: Rp${t.nominal.toLocaleString('id')}</span>
+        </div>
+        <div class="nabung-bar"><div class="nabung-fill" style="width:${pct}%"></div></div>
+        <div class="nabung-pct">${pct}% • Sisa Rp${Math.max(sisa,0).toLocaleString('id')} • ${t.hari} hari</div>
+      </div>
+      <div class="nabung-setor">
+        <input type="number" id="setor-${t.id}" placeholder="Nominal setor (Rp)" min="0">
+        <button class="btn-setor" onclick="setorNabung('${t.id}')">+ Setor</button>
+      </div>
+      ${riwHTML ? `<div class="riwayat-list">${riwHTML}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════
+// PR SEKOLAH
+// ══════════════════════════════════════════
+function getPRData() { return JSON.parse(localStorage.getItem('pr_list') || '[]'); }
+function savePRData(d) { localStorage.setItem('pr_list', JSON.stringify(d)); }
+
+function tambahPR() {
+  const mapel   = document.getElementById('pr-mapel').value.trim();
+  const halaman = document.getElementById('pr-halaman').value.trim();
+  const jenis   = document.getElementById('pr-jenis').value;
+  const hari    = document.getElementById('pr-hari').value;
+  const tanggal = document.getElementById('pr-tanggal').value;
+  const catatan = document.getElementById('pr-catatan').value.trim();
+  if (!mapel || !halaman || !tanggal) { showNotif('⚠️ Mata pelajaran, halaman, dan tanggal wajib diisi!'); return; }
+
+  const list = getPRData();
+  list.unshift({
+    id: Date.now().toString(),
+    mapel, halaman, jenis, hari, tanggal, catatan,
+    done: false,
+    dibuat: new Date().toISOString().split('T')[0],
+  });
+  savePRData(list);
+  document.getElementById('pr-mapel').value = '';
+  document.getElementById('pr-halaman').value = '';
+  document.getElementById('pr-catatan').value = '';
+  document.getElementById('pr-tanggal').value = '';
+  showNotif('📚 PR ' + mapel + ' disimpan!');
+  renderPR();
+  schedulePRNotif();
+}
+
+function togglePR(id) {
+  const list = getPRData();
+  const idx  = list.findIndex(p => p.id === id);
+  if (idx === -1) return;
+  list[idx].done = !list[idx].done;
+  savePRData(list);
+  renderPR();
+}
+
+function hapusPR(id) {
+  savePRData(getPRData().filter(p => p.id !== id));
+  renderPR();
+  showNotif('🗑️ PR dihapus');
+}
+
+function filterPR(f, btn) {
+  prFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPR();
+}
+
+function isUrgent(tanggal) {
+  const diff = (new Date(tanggal) - new Date()) / 86400000;
+  return diff <= 1;
+}
+
+function renderPR() {
+  let list = getPRData();
+  const aktif = list.filter(p => !p.done).length;
+  document.getElementById('stat-pr').textContent = aktif;
+
+  if (prFilter === 'aktif')   list = list.filter(p => !p.done);
+  if (prFilter === 'selesai') list = list.filter(p => p.done);
+  if (prFilter === 'urgent')  list = list.filter(p => !p.done && isUrgent(p.tanggal));
+
+  const el = document.getElementById('pr-list');
+  if (!list.length) { el.innerHTML = emptyHTML('📚','Tidak ada PR. Santai dulu!'); return; }
+
+  el.innerHTML = list.map(p => {
+    const urgent = !p.done && isUrgent(p.tanggal);
+    return `<div class="pr-card ${p.done?'done':''} ${urgent?'urgent':''}">
+      <div class="pr-check ${p.done?'checked':''}" onclick="togglePR('${p.id}')"></div>
+      <div class="pr-body">
+        <div class="pr-mapel">${escH(p.mapel)}</div>
+        <div class="pr-desc">${escH(p.halaman)}</div>
+        <div class="pr-meta">
+          <span class="pr-badge">${p.jenis}</span>
+          <span class="pr-badge ${urgent?'red':'green'}">📅 ${p.hari}, ${p.tanggal}</span>
+          ${p.catatan ? `<span class="pr-badge">📝 ${escH(p.catatan)}</span>` : ''}
+        </div>
+      </div>
+      <button class="pr-del" onclick="hapusPR('${p.id}')">🗑</button>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════
+// NOTIFIKASI BROWSER
+// ══════════════════════════════════════════
+function requestNotifPermission() {
+  if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+}
+
+function sendBrowserNotif(title, body) {
+  if ('Notification' in window && Notification.permission === 'granted') {
+    new Notification(title, {body, icon:'🕌'});
+  }
+}
+
+function scheduleNabungNotif() {
+  // Cek setiap buka app
+  const targets = getNabungData();
+  targets.forEach(t => {
+    if (t.terkumpul < t.nominal) {
+      const perHari = Math.ceil((t.nominal - t.terkumpul) / t.hari);
+      sendBrowserNotif('💰 Reminder Nabung: ' + t.nama, 'Setor Rp' + perHari.toLocaleString('id') + '/hari untuk capai target!');
+    }
+  });
+}
+
+function schedulePRNotif() {
+  const list = getPRData().filter(p => !p.done && isUrgent(p.tanggal));
+  list.forEach(p => {
+    sendBrowserNotif('📚 PR Urgent: ' + p.mapel, p.halaman + ' — Dikumpul ' + p.hari + ', ' + p.tanggal);
+  });
+}
+
+function checkAllNotifs() {
+  requestNotifPermission();
+  schedulePRNotif();
+  scheduleNabungNotif();
+}
+
+// ══════════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════════
+function saveConfig() {
+  const url = document.getElementById('cfg-url').value.trim().replace(/\/$/, '');
+  API_BASE = url;
+  localStorage.setItem('api_base', url);
+  showNotif('✅ Config disimpan! Memuat ulmu...');
+  loadIlmu();
+}
+
+// ══════════════════════════════════════════
+// DARK MODE / CALM
+// ══════════════════════════════════════════
+function toggleDark() {
+  document.body.classList.toggle('light');
+  localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+}
+function openCalm()  { document.getElementById('calm-overlay').classList.add('active'); }
+function closeCalm() { document.getElementById('calm-overlay').classList.remove('active'); }
+
+// ══════════════════════════════════════════
+// NOTIF TOAST
+// ══════════════════════════════════════════
+let notifTimer;
+function showNotif(msg) {
+  const el = document.getElementById('notif');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(notifTimer);
+  notifTimer = setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+// ══════════════════════════════════════════
+// EVENT ISLAM BANNER
+// ══════════════════════════════════════════
+function checkIslamicEvent() {
+  const m = new Date().getMonth() + 1, d = new Date().getDate();
+  let msg = '';
+  if (m === 3)                   msg = '🌙 Selamat Menyambut Ramadhan — Semoga ibadah kita diterima Allah SWT';
+  if (m === 4 && d <= 3)        msg = '🎉 Selamat Idul Fitri — Minal Aidin Wal Faizin';
+  if (m === 6 && d >= 10 && d <= 13) msg = '🐄 Selamat Idul Adha — Semoga kurban kita diterima';
+  const el = document.getElementById('event-banner');
+  if (msg) { el.textContent = msg; el.style.display = 'block'; }
+}
+
+// ══════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════
+function escH(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function esc(s)  { return String(s).replace(/'/g,"\\'"); }
+
+window.addEventListener('scroll', () => {
+  document.getElementById('scroll-top').classList.toggle('show', window.scrollY > 300);
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeModal(); closeCalm(); }
+  if (e.key === ' ' && currentPage === 'dzikir') { e.preventDefault(); tapDzikir(); }
+});
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+(function init() {
+  if (localStorage.getItem('theme') === 'light') document.body.classList.add('light');
+  checkIslamicEvent();
+  loadIlmu();
+  updateDzikirUI();
+  renderNabung();
+  renderPR();
+  checkAllNotifs();
+  // Set default tanggal PR ke besok
+  const besok = new Date(); besok.setDate(besok.getDate() + 1);
+  const el = document.getElementById('pr-tanggal');
+  if (el) el.value = besok.toISOString().split('T')[0];
+  // Auto refresh ilmu tiap 30 detik
+  setInterval(loadIlmu, 30000);
+  // Cek notif setiap 1 jam
+  setInterval(checkAllNotifs, 3600000);
+})();
+</script>
+<script>
+/* =========================
+   🔥 AUTO DETECT BACKEND API
+   ========================= */
+
+const DOMAIN = "nodegixsz.cloudpanellvip.biz.id";
+const PORT = "25586";
+
+const API_CANDIDATES = [
+  `https://${DOMAIN}:${PORT}/api`,
+  `http://${DOMAIN}:${PORT}/api`
+];
+
+let API = null;
+
+/* =========================
+   CEK API YANG HIDUP
+   ========================= */
+async function detectAPI() {
+  for (let url of API_CANDIDATES) {
+    try {
+      const res = await fetch(url + "/ilmu");
+      if (res.ok) {
+        API = url;
+        console.log("✅ API aktif:", API);
+        return API;
+      }
+    } catch (e) {
+      console.log("❌ gagal:", url);
+    }
+  }
+
+  document.getElementById("list").innerHTML =
+    "❌ Semua API gagal diakses. Server mati atau tidak public.";
+  return null;
+}
+
+/* =========================
+   GET ILMU
+   ========================= */
+async function loadIlmu() {
+  if (!API) await detectAPI();
+  if (!API) return;
+
+  try {
+    const res = await fetch(API + "/ilmu");
+    const data = await res.json();
+
+    let html = "";
+    data.data.forEach(i => {
+      html += `
+        <div class="card">
+          <b>${i.judul}</b><br>
+          <small>${i.kategori} | ${i.tanggal}</small>
+          <p>${i.isi}</p>
+        </div>
+      `;
+    });
+
+    document.getElementById("list").innerHTML = html;
+
+  } catch (e) {
+    document.getElementById("list").innerHTML = "❌ Gagal load data";
+  }
+}
+
+/* =========================
+   POST ILMU
+   ========================= */
+async function tambahIlmu() {
+  if (!API) await detectAPI();
+  if (!API) return;
+
+  const judul = document.getElementById("judul").value;
+  const kategori = document.getElementById("kategori").value;
+  const isi = document.getElementById("isi").value;
+
+  await fetch(API + "/ilmu", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ judul, isi, kategori })
+  });
+
+  alert("Ilmu ditambahkan ✔");
+  loadIlmu();
+}
+
+/* =========================
+   START
+   ========================= */
+detectAPI().then(loadIlmu);
+</script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getDatabase,
+  ref,
+  onValue
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+  databaseURL: "https://islamdatabase-default-rtdb.asia-southeast1.firebasedatabase.app/"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const ilmuRef = ref(db, "ilmu");
+
+onValue(ilmuRef, (snapshot) => {
+  const data = snapshot.val();
+  console.log(data);
+
+  // tampilkan ke html
+});
+</script>
+</body>
+</html>
